@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090711">
+  <title>KHALIL AI — Your AI space</title>
+  <style>
+    :root{--bg:#090711;--panel:#100d1b;--panel2:#171226;--line:#2b2141;--purple:#9b5cff;--purple2:#7039df;--text:#f7f3ff;--muted:#aaa0bc;--user:#332054;--danger:#ff6f91}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at 50% -15%,#2c1550 0,transparent 43%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+    button,textarea,select{font:inherit} button{cursor:pointer}
+    .app{max-width:980px;margin:auto;min-height:100vh;display:flex;flex-direction:column;padding:0 16px}
+    header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff10;gap:12px}
+    .brand{display:flex;align-items:center;gap:11px}.logo{height:42px;width:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#b477ff,#7136db);box-shadow:0 0 28px #8b4dff45;font-weight:900;font-size:20px}
+    .brand h1{font-size:17px;letter-spacing:1.5px;margin:0}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+    .tools{display:flex;align-items:center;gap:8px}.lang{color:var(--text);background:#171226;border:1px solid var(--line);border-radius:11px;padding:9px 8px;max-width:100px}
+    .icon-btn{border:1px solid var(--line);background:#171226;color:var(--text);height:40px;width:40px;border-radius:12px}
+    main{flex:1;display:flex;flex-direction:column;min-height:0}.welcome{text-align:center;padding:56px 12px 28px}
+    .orb{width:76px;height:76px;border-radius:26px;margin:0 auto 20px;display:grid;place-items:center;background:linear-gradient(145deg,#311958,#171025);border:1px solid #a16aff55;box-shadow:0 0 60px #813bff20;font-size:34px}
+    .welcome h2{font-size:clamp(26px,5vw,40px);margin:0 0 12px;letter-spacing:-.6px}.gradient{background:linear-gradient(90deg,#c9a7ff,#9857ff,#f0d7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .welcome p{max-width:520px;margin:0 auto;color:var(--muted);line-height:1.8;font-size:14px}
+    .suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:640px;width:100%;margin:24px auto 0}
+    .suggestion{background:#130f20;border:1px solid var(--line);border-radius:15px;padding:14px;text-align:start;color:var(--text);line-height:1.5;font-size:13px;transition:.2s}
+    .suggestion:hover{border-color:#8c53e8;transform:translateY(-1px)}.suggestion span{display:block;font-size:18px;margin-bottom:8px}
+    #chat{display:none;flex:1;padding:24px 0 14px;gap:18px}.message{display:flex;gap:10px;align-items:flex-start;max-width:88%;animation:up .2s ease}.message.user{align-self:flex-start;flex-direction:row-reverse}.message.bot{align-self:flex-end}
+    .avatar{flex:0 0 34px;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#211434;border:1px solid #513477;font-size:13px;font-weight:800}.user .avatar{background:#493071}
+    .bubble{padding:12px 15px;border:1px solid var(--line);border-radius:16px;background:#151021;line-height:1.75;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.user .bubble{background:var(--user);border-color:#6845a0}.meta{font-size:10px;color:var(--muted);margin-top:6px}
+    .composer-wrap{position:sticky;bottom:0;padding:14px 0 max(16px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 18%)}
+    .composer{border:1px solid #493366;background:#130f20;border-radius:20px;padding:10px;box-shadow:0 12px 45px #0005;display:flex;align-items:flex-end;gap:9px}
+    textarea{flex:1;resize:none;min-height:44px;max-height:140px;background:transparent;color:var(--text);border:0;outline:none;padding:11px 8px;line-height:1.5}textarea::placeholder{color:#857b98}
+    .send{width:44px;height:44px;flex:0 0 44px;border:0;border-radius:14px;background:linear-gradient(145deg,#b47aff,#7738e6);color:white;font-size:20px;box-shadow:0 4px 20px #8b4cff40}
+    .foot{text-align:center;color:#766d87;font-size:10px;padding:0 0 12px}.newchat-label{display:none}
+    @keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:520px){.app{padding:0 12px}header{height:68px}.brand h1{font-size:15px}.brand small{font-size:10px}.logo{height:38px;width:38px}.welcome{padding:44px 4px 22px}.welcome p{font-size:13px}.suggestions{gap:8px}.suggestion{padding:12px;font-size:12px}.message{max-width:96%}.bubble{font-size:13px}.lang{padding:8px 5px;font-size:12px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">K</div>
+      <div><h1>KHALIL <span class="gradient">AI</span></h1><small id="tagline">مساحتك الذكية</small></div>
+    </div>
+    <div class="tools">
+      <select class="lang" id="language" aria-label="Language">
+        <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
+      </select>
+      <button class="icon-btn" id="newChat" title="New chat" aria-label="New chat">＋</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="welcome" id="welcome">
+      <div class="orb">✦</div>
+      <h2 id="headline">مرحبا بيك في <span class="gradient">KHALIL AI</span></h2>
+      <p id="subhead">مساعدك الرقمي الجديد. اسأل، اكتشف أفكار جديدة، وخلي الإبداع يبدأ من هنا.</p>
+      <div class="suggestions">
+        <button class="suggestion" data-prompt="اعطيني أفكار لمشروع صغير نبدأه بالتاليفون"><span>✧</span><b id="s1t">أفكار مشاريع</b><br><span id="s1d">اكتشف أفكار جديدة</span></button>
+        <button class="suggestion" data-prompt="فسرلي الذكاء الاصطناعي بطريقة بسيطة"><span>⌘</span><b id="s2t">تعلّم حاجة جديدة</b><br><span id="s2d">افهم المواضيع بسهولة</span></button>
+        <button class="suggestion" data-prompt="عاونّي نكتب موقع ويب بسيط"><span>⌁</span><b id="s3t">اكتب كود</b><br><span id="s3d">ابدأ مشروعك البرمجي</span></button>
+        <button class="suggestion" data-prompt="اعطيني خطة لتنظيم وقتي اليوم"><span>◷</span><b id="s4t">نظّم نهارك</b><br><span id="s4d">خطط ليومك بذكاء</span></button>
+      </div>
+    </section>
+    <section id="chat" aria-live="polite"></section>
+  </main>
+
+  <div class="composer-wrap">
+    <form class="composer" id="chatForm">
+      <textarea id="prompt" rows="1" placeholder="اكتب سؤالك هنا..." aria-label="Message"></textarea>
+      <button class="send" type="submit" aria-label="Send">↑</button>
+    </form>
+  </div>
+  <div class="foot" id="footnote">نسخة تجريبية محلية • الإجابات ليست متصلة بموديل AI بعد</div>
+</div>
+<script>
+const copy = {
+ ar:{dir:"rtl",tag:"مساحتك الذكية",headline:'مرحبا بيك في <span class="gradient">KHALIL AI</span>',sub:"مساعدك الرقمي الجديد. اسأل، اكتشف أفكار جديدة، وخلي الإبداع يبدأ من هنا.",ph:"اكتب سؤالك هنا...",foot:"نسخة تجريبية محلية • الإجابات ليست متصلة بموديل AI بعد",newTitle:"محادثة جديدة",s:[["أفكار مشاريع","اكتشف أفكار جديدة"],["تعلّم حاجة جديدة","افهم المواضيع بسهولة"],["اكتب كود","ابدأ مشروعك البرمجي"],["نظّم نهارك","خطط ليومك بذكاء"]],empty:"اكتب رسالة قبل الإرسال.",reply:"أنا حاليًا نسخة تجريبية من KHALIL AI، ومازلت ما نتصلتش بموديل ذكاء اصطناعي حقيقي.\n\nنجم نعاونك تجرّب الواجهة. في المرحلة الجاية نربطوا الموقع بموديل AI عبر خدمة مناسبة، مع حماية أي مفتاح سري.",you:"أنت",bot:"KHALIL AI"},
+ fr:{dir:"ltr",tag:"Votre espace intelligent",headline:'Bienvenue sur <span class="gradient">KHALIL AI</span>',sub:"Votre nouvel assistant numérique. Posez vos questions, explorez des idées et laissez commencer la créativité.",ph:"Écrivez votre question ici...",foot:"Démo locale • Pas encore connecté à un modèle IA",newTitle:"Nouvelle discussion",s:[["Idées de projets","Découvrez de nouvelles idées"],["Apprendre","Comprenez plus facilement"],["Écrire du code","Lancez votre projet"],["Organiser la journée","Planifiez intelligemment"]],empty:"Écrivez un message avant l’envoi.",reply:"Je suis actuellement une démo de KHALIL AI et je ne suis pas encore connecté à un véritable modèle d’intelligence artificielle.\n\nVous pouvez tester l’interface. Ensuite, nous pourrons connecter le site à un modèle adapté et protéger toute clé secrète.",you:"Vous",bot:"KHALIL AI"},
+ en:{dir:"ltr",tag:"Your intelligent space",headline:'Welcome to <span class="gradient">KHALIL AI</span>',sub:"Your new digital assistant. Ask questions, explore new ideas, and let creativity begin.",ph:"Type your question here...",foot:"Local demo • Not connected to an AI model yet",newTitle:"New chat",s:[["Project ideas","Discover new ideas"],["Learn something","Understand topics easily"],["Write code","Start your coding project"],["Plan your day","Organize your time"]],empty:"Type a message before sending.",reply:"I'm currently a KHALIL AI demo and I'm not connected to a real AI model yet.\n\nYou can test the interface now. Next, we can connect the site to a suitable AI model and keep any secret key protected.",you:"You",bot:"KHALIL AI"}
+};
+const language=document.getElementById("language"), welcome=document.getElementById("welcome"), chat=document.getElementById("chat"), promptBox=document.getElementById("prompt"), form=document.getElementById("chatForm");
+let current="ar";
+function setLanguage(lang){
+ current=lang; const c=copy[lang]; document.documentElement.lang=lang;document.documentElement.dir=c.dir;
+ document.getElementById("tagline").textContent=c.tag;document.getElementById("headline").innerHTML=c.headline;document.getElementById("subhead").textContent=c.sub;promptBox.placeholder=c.ph;document.getElementById("footnote").textContent=c.foot;document.getElementById("newChat").title=c.newTitle;
+ c.s.forEach((item,i)=>{document.getElementById("s"+(i+1)+"t").textContent=item[0];document.getElementById("s"+(i+1)+"d").textContent=item[1]});
+ document.querySelectorAll(".suggestion").forEach((b,i)=>{b.dataset.prompt=lang==="ar"?["اعطيني أفكار لمشروع صغير نبدأه بالتاليفون","فسرلي الذكاء الاصطناعي بطريقة بسيطة","عاونّي نكتب موقع ويب بسيط","اعطيني خطة لتنظيم وقتي اليوم"][i]:lang==="fr"?["Donne-moi des idées de petits projets sur téléphone","Explique simplement l’intelligence artificielle","Aide-moi à créer un site web simple","Aide-moi à organiser ma journée"][i]:["Give me small project ideas I can start on my phone","Explain artificial intelligence simply","Help me build a simple website","Help me plan my day"][i]});
+}
+function addMessage(text,who){
+ const row=document.createElement("div");row.className="message "+who;
+ const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=who==="user"?"Y":"K";
+ const content=document.createElement("div");content.style.minWidth="0";
+ const bubble=document.createElement("div");bubble.className="bubble";bubble.textContent=text;
+ const meta=document.createElement("div");meta.className="meta";meta.textContent=who==="user"?copy[current].you:copy[current].bot;
+ content.append(bubble,meta);row.append(avatar,content);chat.append(row);chat.scrollTop=chat.scrollHeight;
+}
+function sendMessage(text){
+ text=text.trim();if(!text)return;
+ welcome.style.display="none";chat.style.display="flex";
+ addMessage(text,"user");promptBox.value="";promptBox.style.height="44px";
+ setTimeout(()=>addMessage(copy[current].reply,"bot"),250);
+}
+form.addEventListener("submit",e=>{e.preventDefault();if(!promptBox.value.trim()){promptBox.focus();return}sendMessage(promptBox.value)});
+promptBox.addEventListener("input",()=>{promptBox.style.height="44px";promptBox.style.height=Math.min(promptBox.scrollHeight,140)+"px"});
+promptBox.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
+document.querySelectorAll(".suggestion").forEach(b=>b.addEventListener("click",()=>sendMessage(b.dataset.prompt)));
+language.addEventListener("change",()=>setLanguage(language.value));
+document.getElementById("newChat").addEventListener("click",()=>{chat.innerHTML="";chat.style.display="none";welcome.style.display="block";promptBox.value="";promptBox.focus()});
+setLanguage("ar");
+</script>
+</body>
+</html>
