@@ -94,12 +94,71 @@ function addMessage(text,who){
  const meta=document.createElement("div");meta.className="meta";meta.textContent=who==="user"?copy[current].you:copy[current].bot;
  content.append(bubble,meta);row.append(avatar,content);chat.append(row);chat.scrollTop=chat.scrollHeight;
 }
-function sendMessage(text){
- text=text.trim();if(!text)return;
- welcome.style.display="none";chat.style.display="flex";
- addMessage(text,"user");promptBox.value="";promptBox.style.height="44px";
- setTimeout(()=>addMessage(copy[current].reply,"bot"),250);
-}
+
+let chatHistory = [];
+let isWaiting = false;
+
+async function sendMessage(text) {
+  text = text.trim();
+  if (!text || isWaiting) return;
+
+  welcome.style.display = "none";
+  chat.style.display = "flex";
+
+  addMessage(text, "user");
+  promptBox.value = "";
+  promptBox.style.height = "44px";
+
+  chatHistory.push({ role: "user", content: text });
+
+  isWaiting = true;
+  const sendButton = form.querySelector(".send");
+  sendButton.disabled = true;
+
+  addMessage(
+    current === "ar" ? "جاري التفكير..." :
+    current === "fr" ? "Réflexion en cours..." :
+    "Thinking...",
+    "bot"
+  );
+
+  const answerBubble = chat.lastElementChild.querySelector(".bubble");
+
+  try {
+    const response = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: chatHistory })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI connection failed");
+    }
+
+    answerBubble.textContent = data.answer;
+    chatHistory.push({
+      role: "assistant",
+      content: data.answer
+    });
+
+  } catch (error) {
+    chatHistory.pop();
+
+    answerBubble.textContent =
+      current === "ar"
+        ? "ما نجمتش نتصل بالذكاء الاصطناعي. ما تقلقش، تثبّت من إعدادات الربط."
+        : current === "fr"
+          ? "Connexion impossible. Vérifiez la configuration."
+          : "Couldn't connect to AI. Check the configuration.";
+
+  } finally {
+    isWaiting = false;
+    sendButton.disabled = false;
+  }
+      }
+  
 form.addEventListener("submit",e=>{e.preventDefault();if(!promptBox.value.trim()){promptBox.focus();return}sendMessage(promptBox.value)});
 promptBox.addEventListener("input",()=>{promptBox.style.height="44px";promptBox.style.height=Math.min(promptBox.scrollHeight,140)+"px"});
 promptBox.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
